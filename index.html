@@ -1,0 +1,4543 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DKStore</title>
+    <style>
+      :root {
+        --bg: #0e1117;
+        --panel: #161b25;
+        --line: #2a3342;
+        --gold: #e8a33d;
+        --cream: #f6e7c8;
+        --text: #f1f3f7;
+        --mute: #98a2b3;
+        --red: #ef5350;
+        --green: #34c38f;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      /* header */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(14, 17, 23, 0.95);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(8px);
+      }
+      .hd {
+        max-width: 1200px;
+        margin: auto;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--cream);
+        cursor: pointer;
+        letter-spacing: 0.5px;
+      }
+      .logo small {
+        display: block;
+        font-size: 0.6rem;
+        font-weight: 400;
+        color: var(--mute);
+        letter-spacing: 0;
+      }
+      nav {
+        display: flex;
+        gap: 22px;
+        margin-left: auto;
+        align-items: center;
+      }
+      nav a {
+        color: var(--text);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      nav a:hover {
+        color: var(--gold);
+      }
+      .tools {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 260px;
+      }
+      body.in .tools {
+        display: flex;
+      }
+      .loc {
+        font-size: 0.8rem;
+        color: var(--mute);
+        white-space: nowrap;
+      }
+      .search {
+        display: flex;
+        flex: 1;
+      }
+      .search input {
+        flex: 1;
+        min-width: 0;
+        padding: 9px 14px;
+        border: 1px solid var(--line);
+        border-right: 0;
+        border-radius: 999px 0 0 999px;
+        background: var(--panel);
+        color: var(--text);
+        outline: none;
+      }
+      .search button {
+        padding: 9px 18px;
+        border: 0;
+        border-radius: 0 999px 999px 0;
+        background: var(--gold);
+        font-weight: 700;
+      }
+      .cartbtn {
+        position: relative;
+        background: none;
+        border: 1px solid var(--line);
+        color: var(--text);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+      }
+      .cartbtn b {
+        background: var(--gold);
+        color: #000;
+        border-radius: 999px;
+        padding: 1px 7px;
+        margin-left: 4px;
+        font-size: 0.75rem;
+      }
+      /* layout */
+      main {
+        max-width: 1200px;
+        margin: auto;
+        padding: 24px;
+      }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+      }
+      h3 {
+        font-size: 1.1rem;
+      }
+      .sub {
+        color: var(--mute);
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .card img {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        border-radius: 6px;
+        background: #1e2635;
+      }
+      .card .mute,
+      .mute {
+        color: var(--mute);
+        font-size: 0.82rem;
+      }
+      .price {
+        font-weight: 700;
+        color: var(--gold);
+      }
+      .price del {
+        color: var(--mute);
+        font-weight: 400;
+        font-size: 0.8rem;
+        margin-left: 6px;
+      }
+      .btn {
+        background: var(--gold);
+        color: #000;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-weight: 700;
+        margin-top: auto;
+      }
+      .btn.alt {
+        background: #2a3342;
+        color: var(--text);
+      }
+      .btn:hover {
+        filter: brightness(1.1);
+      }
+      .back {
+        margin-top: 28px;
+        background: none;
+        border: 1px solid var(--line);
+        color: var(--text);
+        padding: 9px 20px;
+        border-radius: 8px;
+      }
+      .back:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .form {
+        max-width: 440px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      input,
+      select {
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        font-size: 0.95rem;
+        outline: none;
+      }
+      input:focus,
+      select:focus {
+        border-color: var(--gold);
+      }
+      .row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      /* hero carousel (mengacu pada referensi Bucini) */
+      .hero {
+        position: relative;
+        height: min(560px, 70vh);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 36px;
+        background: #000;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: grayscale(0.85) contrast(1.05);
+        opacity: 0;
+        transition: opacity 0.8s;
+      }
+      .slide.on {
+        opacity: 1;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.05) 70%);
+      }
+      .hero-txt {
+        position: absolute;
+        z-index: 2;
+        left: 6%;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 520px;
+      }
+      .hero-txt h1 {
+        font-size: clamp(2.4rem, 6vw, 4.4rem);
+        line-height: 1.02;
+        font-weight: 800;
+        color: var(--cream);
+      }
+      .hero-txt p {
+        margin: 16px 0 22px;
+        color: #fff;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 360px;
+      }
+      .shop {
+        background: #fff;
+        color: #111;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 32px;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .shop:hover {
+        background: var(--gold);
+      }
+      .dots {
+        position: absolute;
+        z-index: 3;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+      }
+      .dots i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #fff6;
+        cursor: pointer;
+      }
+      .dots i.on {
+        background: #fff;
+      }
+      .usp {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      .usp div {
+        border-top: 2px solid var(--gold);
+        padding-top: 10px;
+      }
+      .usp b {
+        display: block;
+        margin-bottom: 4px;
+      }
+      /* flash sale */
+      .flash {
+        background: linear-gradient(120deg, #2b1b4f, #8c1d2b);
+        border-radius: 12px;
+        padding: 22px 28px;
+        margin-bottom: 26px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .timer {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #ffe08a;
+        font-variant-numeric: tabular-nums;
+      }
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+      .menu .btn {
+        padding: 18px;
+        background: var(--panel);
+        color: var(--gold);
+        border: 1px solid var(--line);
+        font-size: 1rem;
+      }
+      .menu .btn:hover {
+        border-color: var(--gold);
+      }
+      /* detail, cart */
+      .detail {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+        gap: 32px;
+      }
+      .detail img {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      .item {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .item img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .item .info {
+        flex: 1;
+      }
+      .qty {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .qty button {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--text);
+      }
+      .total {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+      }
+      .total.big {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--gold);
+      }
+      .pay {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        width: 100%;
+        text-align: left;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 18px 22px;
+        margin-bottom: 14px;
+      }
+      .pay:hover {
+        border-color: var(--gold);
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-left: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      /* modal, toast, chat */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: #000b;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 20px;
+      }
+      .modal.on {
+        display: flex;
+      }
+      .box {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 26px;
+        max-width: 380px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      #toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: var(--cream);
+        color: #111;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: transform 0.3s;
+        z-index: 120;
+      }
+      #toast.on {
+        transform: translateX(-50%);
+      }
+      .chat {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 60;
+      }
+      .chat button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 0;
+        background: var(--gold);
+        font-size: 1.3rem;
+      }
+      .chat span {
+        background: #222;
+        color: #fff;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 6px;
+      }
+      .nota {
+        max-width: 480px;
+        margin: 20px auto;
+        text-align: left;
+      }
+      .slide,
+      .tile,
+      .promo {
+        background-color: #2b3550;
+      }
+      .slide:nth-child(2) {
+        background-color: #3b2b50;
+      }
+      .slide:nth-child(3) {
+        background-color: #2b4050;
+      }
+      .hero::after { display: none; }
+      .track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory;
+        scrollbar-width: none; cursor: grab; overscroll-behavior-x: contain; touch-action: pan-x pan-y; }
+      .track::-webkit-scrollbar { display: none; }
+      .track.drag { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+      .hs { flex: 0 0 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center;
+        justify-content: space-between; gap: 24px; padding: 0 7%; background-size: cover; background-position: center; }
+      .hs::before { content: ""; position: absolute; inset: 0;
+        background: linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.25) 60%, rgba(0,0,0,.55)); }
+      .hs > * { position: relative; }
+      .hs-txt { max-width: 480px; }
+      .hs-txt small { display: inline-block; background: rgba(255,255,255,.16); color: #fff; padding: 4px 14px;
+        border-radius: 999px; font-size: .78rem; margin-bottom: 14px; }
+      .hs-txt h1 { font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.04; font-weight: 800; color: var(--cream); }
+      .hs-txt p { margin: 14px 0 22px; color: #fff; font-size: .95rem; line-height: 1.6; max-width: 380px; }
+      .hs .hs-pics { position: absolute; inset: 0; z-index: 0; display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr; gap: 3px; filter: grayscale(.35) contrast(1.05); }
+      .hs-pics img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: #1e2635; }
+      .hs::before { z-index: 1; }
+      .hs .hs-txt { z-index: 2; }
+      .arw { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; width: 42px; height: 42px;
+        border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(0,0,0,.45); color: #fff; font-size: 1.6rem; line-height: 1; }
+      .arw:hover { background: var(--gold); color: #000; }
+      .arw.l { left: 12px; } .arw.r { right: 12px; }
+      .dots i { transition: width .25s; } .dots i.on { width: 26px; border-radius: 6px; }
+      @media (max-width: 760px) { .hs-pics { grid-template-columns: 1fr 1fr; } .hs-pics img:nth-child(3) { display: none; } }
+      @media (hover: none) { .arw { display: none; } }
+      .qrbox { background: #fff; padding: 6px; border-radius: 12px; width: min(360px, 100%); margin: 0 auto; }
+      .qrbox svg { width: 100%; height: auto; display: block; }
+      .box.qris { max-height: 94vh; overflow: auto; max-width: 420px; }
+      .nota hr { border: 0; border-top: 1px dashed var(--line); margin: 10px 0; }
+      .nota .ln { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; font-size: .88rem; }
+      .strukonly { display: none; position: fixed; inset: 0; z-index: 300; overflow: auto; background: var(--bg); padding: 20px; }
+      .strukonly.on { display: block; }
+      .strukonly { background: #21b68c; }
+      .er-wrap { max-width: 420px; margin: 0 auto; padding: 14px 0 30px; }
+      .er { position: relative; background: #fff; color: #111; font-family: Arial, Helvetica, sans-serif; padding: 26px 22px 24px; margin: 8px 0; filter: drop-shadow(0 8px 18px rgba(0,0,0,.28)); }
+      .er::before, .er::after { content: ""; position: absolute; left: 0; right: 0; height: 8px; background-size: 16px 16px; background-repeat: repeat-x; }
+      .er::before { top: -8px; background-image: linear-gradient(135deg, transparent 8px, #fff 0), linear-gradient(225deg, transparent 8px, #fff 0); background-position: left top; }
+      .er::after { bottom: -8px; background-image: linear-gradient(-45deg, transparent 8px, #fff 0), linear-gradient(45deg, transparent 8px, #fff 0); background-position: left bottom; }
+      .er * { font-family: inherit; }
+      .er-logo { width: 46px; height: 46px; margin: 0 auto 8px; border-radius: 50%; background: #21b68c; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
+      .er-c { text-align: center; font-size: .92rem; line-height: 1.45; }
+      .er-c h3 { font-size: 1.25rem; margin-bottom: 2px; color: #111; }
+      .er .er-dash { border: 0; border-top: 2px dashed #bdbdbd; margin: 14px 0; }
+      .er-r { display: flex; justify-content: space-between; gap: 12px; font-size: .92rem; padding: 2px 0; }
+      .er-r.mute { color: #555; font-size: .85rem; }
+      .er-it { padding: 5px 0; }
+      .er-it b { display: block; font-size: .95rem; }
+      .er-it small { display: block; color: #666; font-size: .78rem; margin: 1px 0 2px 14px; }
+      .er-it .er-r { margin-left: 14px; }
+      .er-total { border: 3px solid #1fbf5b; border-radius: 6px; padding: 10px 12px; margin: 14px 0; }
+      .er-total .er-r:first-child { font-weight: 800; font-size: 1.05rem; }
+      .er-ok { display: inline-block; background: #e8f8ef; color: #12803b; border: 1px solid #1fbf5b; border-radius: 999px; padding: 3px 14px; font-size: .78rem; font-weight: 700; margin-top: 6px; }
+      .er .qrbox { width: 150px; padding: 0; margin: 10px auto 0; }
+      .er-btn { display: block; width: 100%; max-width: 420px; margin: 18px auto 0; padding: 13px; border-radius: 10px; border: 0; background: #fff; color: #0c6b50; font-weight: 700; font-size: .95rem; }
+      @media print { body > *:not(#strukOnly) { display: none !important; } .er-btn { display: none; } }
+      .topback {
+        display: none;
+        position: sticky;
+        top: var(--hh, 76px);
+        z-index: 40;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 16px;
+        padding: 9px 18px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(22, 27, 37, 0.95);
+        color: var(--text);
+        font-weight: 600;
+        font-size: 0.88rem;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      }
+      .topback:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .topback small {
+        color: var(--mute);
+        font-weight: 400;
+      }
+      .pic {
+        position: relative;
+        overflow: hidden;
+        border-radius: 6px;
+      }
+      .pic img {
+        transition: transform 0.4s;
+      }
+      .card:hover .pic img {
+        transform: scale(1.06);
+      }
+      .card {
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .card:hover {
+        border-color: var(--gold);
+        transform: translateY(-3px);
+      }
+      .tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: var(--red);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+      .tile {
+        height: 240px;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-end;
+        border: 1px solid var(--line);
+      }
+      .tile::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.8), transparent 65%);
+      }
+      .tile div {
+        position: relative;
+        padding: 18px;
+      }
+      .tile b {
+        display: block;
+        font-size: 1.4rem;
+        color: var(--cream);
+      }
+      .tile span {
+        font-size: 0.85rem;
+        color: #ddd;
+      }
+      .tile:hover {
+        border-color: var(--gold);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 22px;
+        text-align: center;
+        color: var(--mute);
+        font-size: 0.85rem;
+      }
+      .stats b {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--gold);
+      }
+      .promos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+      .promo {
+        min-height: 260px;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+      }
+      .promo::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.1));
+      }
+      .promo div {
+        position: relative;
+        padding: 20px;
+      }
+      .promo p {
+        margin: 4px 0 12px;
+        color: #ffe08a;
+        font-size: 0.9rem;
+      }
+      .promo .shop {
+        padding: 9px 24px;
+      }
+      .who {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: auto;
+      }
+      .who i {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--gold);
+        color: #000;
+        font-style: normal;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        font-size: 0.8rem;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        margin-top: 50px;
+        background: #0a0d13;
+      }
+      .ft {
+        max-width: 1200px;
+        margin: auto;
+        padding: 36px 24px 8px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 2fr;
+        gap: 28px;
+        font-size: 0.85rem;
+      }
+      .ft b {
+        display: block;
+        margin-bottom: 8px;
+      }
+      .ft a {
+        display: block;
+        color: var(--mute);
+        margin-bottom: 6px;
+        cursor: pointer;
+      }
+      .ft a:hover {
+        color: var(--gold);
+      }
+      @media (max-width: 760px) {
+        .ft {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 760px) {
+        .detail {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          margin-left: 0;
+          gap: 14px;
+        }
+        .chat span {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="hd">
+        <div class="logo" onclick="go('home', true)">
+          DKStore<small>Belanja simpel, kualitas awet</small>
+        </div>
+        <div class="tools">
+          <span class="loc">📍 Malang, Jawa Timur</span>
+          <div class="search">
+            <input
+              id="q"
+              placeholder="Cari jaket, elektronik, aksesori"
+              onkeydown="if (event.key === 'Enter') search();"
+            /><button onclick="search()">Cari</button>
+          </div>
+          <button class="cartbtn" onclick="go('cart')">Keranjang<b id="cc">0</b></button>
+        </div>
+        <nav>
+          <a onclick="guard('kategori')">Kategori</a>
+          <a onclick="guard('toko')">Toko / Reseller</a>
+          <a onclick="guard('fitur')">Fitur Lain</a>
+          <a id="authLink" onclick="authClick()">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- BERANDA + BANNER PROMO CAROUSEL -->
+      <button class="topback" id="topBack" onclick="back()" aria-label="Kembali ke halaman sebelumnya">
+        <span aria-hidden="true">&larr;</span> Kembali
+        <small id="topBackLabel"></small>
+      </button>
+      <section id="home" class="page active">
+        <div class="hero" id="hero">
+          <div class="track" id="track" tabindex="0" aria-label="Banner kategori, geser untuk melihat kategori lain"></div>
+          <button class="arw l" onclick="goSlide(hi - 1)" aria-label="Sebelumnya">&#8249;</button>
+          <button class="arw r" onclick="goSlide(hi + 1)" aria-label="Berikutnya">&#8250;</button>
+          <div class="dots" id="dots"></div>
+        </div>
+        <div class="usp">
+          <div>
+            <b>Kualitas terpilih</b><span class="mute">Setiap produk dicek sebelum dikirim.</span>
+          </div>
+          <div>
+            <b>Kirim ke seluruh Indonesia</b
+            ><span class="mute">Pilih JNE, J&amp;T, atau SiCepat.</span>
+          </div>
+          <div>
+            <b>Bayar sesuai kebiasaan</b
+            ><span class="mute">E-wallet, transfer bank, kartu, atau QRIS.</span>
+          </div>
+        </div>
+        <h2 style="margin-bottom: 14px">Belanja per kategori</h2>
+        <div class="tiles">
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Fashion')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700&quot;);
+            "
+          >
+            <div><b>Fashion</b><span>11 produk pilihan</span></div>
+          </div>
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Elektronik')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=700&quot;);
+            "
+          >
+            <div><b>Elektronik</b><span>8 gadget terbaru</span></div>
+          </div>
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Aksesori')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=700&quot;);
+            "
+          >
+            <div><b>Aksesori</b><span>6 aksesori harian</span></div>
+          </div>
+        </div>
+        <div class="stats">
+          <div><b>25</b>Produk pilihan</div>
+          <div><b>5</b>Toko partner</div>
+          <div><b>4</b>Metode bayar</div>
+          <div><b>24/7</b>Layanan CS</div>
+        </div>
+        <h2 style="margin-top: 40px">Produk terlaris</h2>
+        <p class="sub">Login untuk melihat harga flash sale dan seluruh katalog.</p>
+        <div class="grid" id="homeList"></div>
+        <h2 style="margin: 40px 0 6px">Banner promo &amp; penawaran utama</h2>
+        <p class="sub">Penawaran terbatas, login untuk melihat detailnya.</p>
+        <div class="promos">
+          <div
+            class="promo"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&quot;);
+            "
+          >
+            <div>
+              <h3>Koleksi fashion terbaru</h3>
+              <p>Diskon hingga 50% minggu ini</p>
+              <button class="shop" onclick="go('login')">Lihat promo</button>
+            </div>
+          </div>
+          <div
+            class="promo"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&quot;);
+            "
+          >
+            <div>
+              <h3>Gadget &amp; elektronik canggih</h3>
+              <p>Cashback spesial pengguna baru</p>
+              <button class="shop" onclick="go('login')">Lihat promo</button>
+            </div>
+          </div>
+          <div
+            class="promo"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&quot;);
+            "
+          >
+            <div>
+              <h3>Aksesori trendy &amp; modis</h3>
+              <p>Penawaran beli 1 gratis 1</p>
+              <button class="shop" onclick="go('login')">Lihat promo</button>
+            </div>
+          </div>
+        </div>
+        <h2 style="margin: 40px 0 14px">Kata pelanggan</h2>
+        <div class="grid">
+          <div class="card">
+            <p>"Hoodie-nya tebal dan jahitannya rapi. Sampai di Malang hanya dua hari."</p>
+            <div class="who">
+              <i>AR</i><span><b>Andi R.</b><br /><small class="mute">Malang</small></span>
+            </div>
+          </div>
+          <div class="card">
+            <p>
+              "Earphone sesuai deskripsi, bass-nya mantap. Proses refund juga cepat saat saya salah
+              pesan."
+            </p>
+            <div class="who">
+              <i>DS</i><span><b>Dewi S.</b><br /><small class="mute">Surabaya</small></span>
+            </div>
+          </div>
+          <div class="card">
+            <p>"Dompet kulitnya awet dan harganya masuk akal. Pembayaran QRIS tinggal scan."</p>
+            <div class="who">
+              <i>BP</i><span><b>Bagus P.</b><br /><small class="mute">Jakarta</small></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Belum punya akun -> Registrasi -> Login -->
+      <section id="register" class="page">
+        <h2>Buat akun baru</h2>
+        <p class="sub">Isi data berikut untuk mulai berbelanja.</p>
+        <div class="form">
+          <label>Nama lengkap<input id="rn" placeholder="Nama sesuai KTP" /></label>
+          <label>Email<input id="re" type="email" placeholder="nama@email.com" /></label>
+          <label
+            >Kata sandi<input id="rp" type="password" placeholder="Minimal 6 karakter"
+          /></label>
+          <button class="btn" onclick="register()">Daftar akun</button>
+          <button class="btn alt" onclick="go('login')">Sudah punya akun? Login</button>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="login" class="page">
+        <h2>Login akun</h2>
+        <p class="sub">Masuk untuk membuka menu belanja.</p>
+        <div class="form">
+          <label>Email<input id="le" type="email" placeholder="nama@email.com" /></label>
+          <label>Kata sandi<input id="lp" type="password" placeholder="Kata sandi" /></label>
+          <button class="btn" onclick="login()">Login</button>
+          <button class="btn alt" onclick="go('register')">Belum punya akun? Daftar</button>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <!-- MENU NAVIGASI + FLASH SALE -->
+      <section id="menu" class="page">
+        <div class="flash">
+          <div>
+            <h2 id="hello">Flash sale</h2>
+            <p style="color: #ffe08a">Harga promo terbatas untuk member.</p>
+          </div>
+          <div class="timer" id="timer">00:00:00</div>
+        </div>
+        <div class="menu">
+          <button class="btn" onclick="go('kategori')">1. Kategori produk</button>
+          <button class="btn" onclick="go('toko')">2. Toko / Reseller</button>
+          <button class="btn" onclick="go('fitur')">3. Fitur lain</button>
+        </div>
+        <h3 style="margin-bottom: 14px">Produk flash sale</h3>
+        <div class="grid" id="flashList"></div>
+      </section>
+
+      <!-- 1. KATEGORI -> LISTING -->
+      <section id="kategori" class="page">
+        <h2>Kategori produk</h2>
+        <p class="sub">Pilih jenis produk yang Anda cari.</p>
+        <div class="tiles">
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Fashion')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700&quot;);
+            "
+          >
+            <div><b>Fashion</b><span>11 produk pilihan</span></div>
+          </div>
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Elektronik')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=700&quot;);
+            "
+          >
+            <div><b>Elektronik</b><span>8 gadget terbaru</span></div>
+          </div>
+          <div
+            class="tile"
+            tabindex="0"
+            onclick="listCat('Aksesori')"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=700&quot;);
+            "
+          >
+            <div><b>Aksesori</b><span>6 aksesori harian</span></div>
+          </div>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="listing" class="page">
+        <h2 id="lt">Produk</h2>
+        <p class="sub" id="ls"></p>
+        <div class="grid" id="listGrid"></div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <!-- 2. TOKO / RESELLER -> STATUS USER -->
+      <section id="toko" class="page">
+        <h2>Status pengguna</h2>
+        <p class="sub">Pilih peran Anda di DKStore.</p>
+        <div class="grid">
+          <div class="card">
+            <h3>Pengunjung</h3>
+            <p class="mute">Lihat daftar toko partner dan katalognya.</p>
+            <button class="btn" onclick="go('partner')">Lihat toko partner</button>
+          </div>
+          <div class="card">
+            <h3>Calon mitra</h3>
+            <p class="mute">Daftar sebagai reseller dan buka dashboard penjualan.</p>
+            <button class="btn alt" onclick="go('mitra')">Isi form pendaftaran</button>
+          </div>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="partner" class="page">
+        <h2>Toko partner</h2>
+        <p class="sub">Toko terverifikasi yang bekerja sama dengan DKStore.</p>
+        <div class="grid" id="partnerGrid"></div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="mitra" class="page">
+        <h2>Pendaftaran mitra</h2>
+        <p class="sub">Data Anda digunakan untuk verifikasi toko.</p>
+        <div class="form">
+          <label>Nama toko<input id="mt" placeholder="Nama toko Anda" /></label>
+          <label
+            >NIK<input id="mk" inputmode="numeric" maxlength="16" placeholder="16 digit NIK"
+          /></label>
+          <button class="btn" onclick="daftarMitra()">Kirim formulir</button>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="dashmitra" class="page">
+        <h2 id="dmName">Dashboard reseller</h2>
+        <p class="sub">Ringkasan toko Anda.</p>
+        <div class="grid">
+          <div class="card">
+            <span class="mute">Total penjualan</span>
+            <h2 class="price">Rp 12.500.000</h2>
+          </div>
+          <div class="card">
+            <span class="mute">Stok tersedia</span>
+            <h2 class="price">142 item</h2>
+          </div>
+          <div class="card">
+            <span class="mute">Pesanan baru</span>
+            <h2 class="price">8 pesanan</h2>
+          </div>
+        </div>
+        <button class="back" onclick="go('home', true)">Ke beranda</button>
+      </section>
+
+      <!-- 3. FITUR LAIN -->
+      <section id="fitur" class="page">
+        <h2>Fitur lain</h2>
+        <p class="sub">Akun, bantuan, dan promo.</p>
+        <div class="grid">
+          <div class="card">
+            <h3>Akun saya &amp; resi</h3>
+            <p class="mute">Profil, riwayat belanja, dan nota.</p>
+            <button
+              class="btn"
+              onclick="
+                renderAkun();
+                go('akun');
+              "
+            >
+              Buka akun
+            </button>
+          </div>
+          <div class="card">
+            <h3>Pusat bantuan</h3>
+            <p class="mute">Hubungi CS atau baca FAQ.</p>
+            <button class="btn" onclick="go('bantuan')">Buka bantuan</button>
+          </div>
+          <div class="card">
+            <h3>Pencarian &amp; promo</h3>
+            <p class="mute">Produk diskon yang sedang berlangsung.</p>
+            <button class="btn" onclick="listPromo()">Lihat promo</button>
+          </div>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="akun" class="page">
+        <h2>Akun saya &amp; resi</h2>
+        <div class="card" style="margin: 16px 0; max-width: 560px" id="akunBox"></div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="bantuan" class="page">
+        <h2>Pusat bantuan</h2>
+        <p class="sub">Kami siap membantu setiap hari.</p>
+        <div class="grid">
+          <div class="card">
+            <h3>Live chat CS</h3>
+            <p class="mute">Respons rata-rata kurang dari 5 menit.</p>
+            <button class="btn" onclick="toast('Live chat terhubung dengan tim CS')">
+              Mulai chat
+            </button>
+          </div>
+          <div class="card">
+            <h3>FAQ</h3>
+            <p class="mute">
+              <b>Berapa lama pengiriman?</b><br />2 sampai 5 hari kerja, tergantung kurir.<br /><br /><b
+                >Bagaimana jika pembayaran gagal?</b
+              ><br />Pilih metode pembayaran lain di halaman pembayaran.
+            </p>
+          </div>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <!-- DETAIL PRODUK -->
+      <section id="detail" class="page">
+        <div class="detail">
+          <img id="dImg" alt="Produk" />
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <h2 id="dName"></h2>
+            <p class="mute" id="dMeta"></p>
+            <h2 class="price" id="dPrice"></h2>
+            <label>Warna<select id="dColor"></select></label>
+            <label><span id="dVarLabel">Ukuran</span><select id="dVar"></select></label>
+            <p class="mute" id="dHint"></p>
+            <p class="mute">⭐ 4,9 dari 5 (ulasan pelanggan terverifikasi)</p>
+            <button class="btn" onclick="addCart()">Masukkan ke keranjang</button>
+          </div>
+        </div>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <!-- KERANJANG -> CHECKOUT -> ALAMAT & EKSPEDISI -> PEMBAYARAN -->
+      <section id="cart" class="page">
+        <h2>Keranjang</h2>
+        <div id="cartBox" style="margin: 14px 0"></div>
+        <button class="btn" id="toCheckout" onclick="go('checkout')">Lanjut ke checkout</button
+        ><button class="btn alt" style="margin-left: 8px" onclick="go('kategori')">Lanjut belanja</button
+        ><br />
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="checkout" class="page">
+        <h2>Checkout</h2>
+        <p class="sub">Alamat dan ekspedisi pengiriman.</p>
+        <div class="row">
+          <div class="form" style="flex: 1; min-width: 280px">
+            <label
+              >Alamat pengiriman<input
+                id="addr"
+                value="Jl. Veteran No. 10, Kota Malang, Jawa Timur"
+            /></label>
+            <label
+              >Kurir<select id="ship" onchange="sumCheckout()">
+                <option value="12000">JNE Reguler (Rp 12.000)</option>
+                <option value="14000">J&amp;T Fast (Rp 14.000)</option>
+                <option value="11000">SiCepat REG (Rp 11.000)</option>
+              </select></label
+            >
+          </div>
+          <div
+            class="card"
+            style="flex: 1; min-width: 260px; align-self: flex-start"
+            id="sumBox"
+          ></div>
+        </div>
+        <button class="btn" style="margin-top: 20px" onclick="go('bayar')">Pilih pembayaran</button
+        ><br />
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <section id="bayar" class="page">
+        <h2>Metode pembayaran</h2>
+        <p class="sub" id="payTotal"></p>
+        <button class="pay" onclick="pay('E-Wallet')">
+          <b>E-Wallet</b
+          ><span
+            ><i class="badge">GoPay</i><i class="badge">OVO</i><i class="badge">ShopeePay</i
+            ><i class="badge">DANA</i></span
+          >
+        </button>
+        <button class="pay" onclick="pay('M-Banking / VA')">
+          <b>M-Banking / Virtual Account</b
+          ><span
+            ><i class="badge">BRI</i><i class="badge">BCA</i><i class="badge">Mandiri</i
+            ><i class="badge">BNI</i></span
+          >
+        </button>
+        <button class="pay" onclick="pay('Kartu Debit / Kredit')">
+          <b>Kartu debit / kredit</b
+          ><span><i class="badge">Mastercard</i><i class="badge">VISA</i></span>
+        </button>
+        <button class="pay" onclick="pay('QRIS Instan')">
+          <b>QRIS instan</b><span><i class="badge">QRIS</i></span>
+        </button>
+        <button class="back" onclick="back()">Kembali</button>
+      </section>
+
+      <!-- NOTIFIKASI & RESI -> SELESAI -->
+      <section id="sukses" class="page" style="text-align: center">
+        <h2 style="color: var(--green)">Pembayaran berhasil</h2>
+        <p class="sub">Nota dan nomor resi sudah diterbitkan.</p>
+        <div class="card nota" id="notaBox"></div>
+        <button class="btn" style="padding: 12px 32px" onclick="go('home', true)">Selesai</button>
+      </section>
+    </main>
+    <footer>
+      <div class="ft">
+        <div>
+          <div class="logo">DKStore</div>
+          <p class="mute">
+            Belanja simpel, kualitas awet. Pengiriman dari Malang ke seluruh Indonesia.
+          </p>
+        </div>
+        <div>
+          <b>Belanja</b><a onclick="guard('kategori')">Kategori</a
+          ><a onclick="guard('toko')">Toko partner</a><a onclick="guard('fitur')">Promo</a>
+        </div>
+        <div>
+          <b>Bantuan</b><a onclick="guard('bantuan')">Pusat bantuan</a
+          ><a onclick="guard('akun')">Lacak resi</a><a onclick="guard('bantuan')">FAQ</a>
+        </div>
+        <div>
+          <b>Pembayaran</b
+          ><span class="mute"
+            >GoPay, OVO, ShopeePay, DANA, BCA, BRI, Mandiri, BNI, VISA, Mastercard, QRIS</span
+          >
+        </div>
+      </div>
+      <p class="mute" style="text-align: center; padding: 16px">
+        &copy; 2026 DKStore. Seluruh hak dilindungi.
+      </p>
+    </footer>
+
+    <div class="chat">
+      <button aria-label="Chat CS" onclick="go('bantuan')">✋</button
+      ><span>Halo! Ada yang bisa dibantu?</span>
+    </div>
+    <div class="modal" id="modal">
+      <div class="box">
+        <h3 id="mTitle">Konfirmasi pembayaran</h3>
+        <p class="mute" id="mText"></p>
+        <button class="btn" onclick="payResult(true)">Simulasikan sukses</button>
+        <button class="btn alt" onclick="payResult(false)">Simulasikan gagal</button>
+      </div>
+    </div>
+    <div class="modal" id="qrisModal">
+      <div class="box qris">
+        <h3>Bayar dengan QRIS</h3>
+        <p class="mute">DKStore Official | NMID ID1026384950711</p>
+        <div class="qrbox" id="qrBox"></div>
+        <div class="total big"><span>Total</span><span id="qrTotal"></span></div>
+        <p class="mute" style="text-align: center">
+          Scan dengan kamera HP. Struk pembelian akan tampil di HP Anda.
+        </p>
+        <p class="mute" id="qrMode" style="text-align: center"></p>
+        <p class="mute" style="text-align: center">Berlaku <b id="qrTimer">10:00</b> menit</p>
+        <button class="btn" onclick="payResult(true)">Simulasikan sukses</button>
+        <button class="btn alt" onclick="payResult(false)">Batalkan / gagal</button>
+      </div>
+    </div>
+    <div id="strukOnly" class="strukonly"></div>
+    <div id="toast"></div>
+
+    <script>
+/* qrcode-generator oleh Kazuhiko Arase (MIT) */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+    <script>
+      const rp = (n) => "Rp " + n.toLocaleString("id-ID");
+      const RAW = [
+        [
+          2,
+          "Kemeja Casual Cotton",
+          "Fashion",
+          150000,
+          0,
+          "DKStore Official",
+          "photo-1596755094514-f87e34085b2c",
+        ],
+        [
+          3,
+          "Sepatu Sneaker White",
+          "Fashion",
+          320000,
+          450000,
+          "Fashion Partner",
+          "photo-1549298916-b41d501d3772",
+        ],
+        [
+          4,
+          "Jaket Denim Unisex",
+          "Fashion",
+          180000,
+          300000,
+          "Denim Style Partner",
+          "photo-1551028719-00167b16eac5",
+        ],
+        [
+          5,
+          "Celana Chino Slimfit",
+          "Fashion",
+          175000,
+          0,
+          "Fashion Partner",
+          "photo-1624378439575-d8705ad7ae80",
+        ],
+        [
+          6,
+          "Hoodie Boxy Heavyweight",
+          "Fashion",
+          240000,
+          0,
+          "DKStore Official",
+          "photo-1556905055-8f358a7a47b2",
+        ],
+        [
+          7,
+          "Sweater Knit Vintage",
+          "Fashion",
+          195000,
+          0,
+          "DKStore Official",
+          "photo-1620799140408-edc6dcb6d633",
+        ],
+        [
+          8,
+          "Gaun Casual Floral",
+          "Fashion",
+          210000,
+          0,
+          "Fashion Partner",
+          "photo-1572804013309-59a88b7e92f1",
+        ],
+        [
+          9,
+          "Jaket Parka Windproof",
+          "Fashion",
+          310000,
+          0,
+          "Denim Style Partner",
+          "photo-1544441893-675973e31985",
+        ],
+        [
+          10,
+          "Celana Cargo Tactical",
+          "Fashion",
+          185000,
+          0,
+          "DKStore Official",
+          "photo-1517445312882-bc9910d016b7",
+        ],
+        [
+          11,
+          "Sepatu Loafer Leather",
+          "Fashion",
+          390000,
+          0,
+          "Fashion Partner",
+          "photo-1614252235316-8c857d38b5f4",
+        ],
+        [
+          12,
+          "Kemeja Flannel Tartan",
+          "Fashion",
+          165000,
+          0,
+          "DKStore Official",
+          "photo-1602810318383-e386cc2a3ccf",
+        ],
+        [
+          13,
+          "Earphone Wireless Bass",
+          "Elektronik",
+          250000,
+          0,
+          "Gadget Utama",
+          "photo-1505740420928-5e560c06d30e",
+        ],
+        [
+          14,
+          "Smartwatch v2 Pro",
+          "Elektronik",
+          350000,
+          700000,
+          "DKStore Official",
+          "photo-1523275335684-37898b6baf30",
+        ],
+        [
+          15,
+          "Keyboard Mechanical RGB",
+          "Elektronik",
+          650000,
+          0,
+          "Gadget Utama",
+          "photo-1587829741301-dc798b83add3",
+        ],
+        [
+          16,
+          "Mouse Gaming Precision",
+          "Elektronik",
+          210000,
+          0,
+          "Gadget Utama",
+          "photo-1527864550417-7fd91fc51a46",
+        ],
+        [
+          17,
+          "Speaker Bluetooth Portable",
+          "Elektronik",
+          310000,
+          0,
+          "DKStore Official",
+          "photo-1608043152269-423dbba4e7e1",
+        ],
+        [
+          18,
+          "Headset Gaming Over-Ear",
+          "Elektronik",
+          420000,
+          560000,
+          "Gadget Utama",
+          "photo-1546435770-a3e426bf472b",
+        ],
+        [
+          19,
+          "Camera Mirrorless 4K",
+          "Elektronik",
+          5200000,
+          0,
+          "Gadget Utama",
+          "photo-1516035069371-29a1b244cc32",
+        ],
+        [
+          20,
+          "Powerbank 20000mAh Fast",
+          "Elektronik",
+          275000,
+          0,
+          "DKStore Official",
+          "photo-1609592424109-dd9892f1b177",
+        ],
+        [
+          21,
+          "Kacamata Anti Radiasi",
+          "Aksesori",
+          85000,
+          0,
+          "Aksesori Center",
+          "photo-1572635196237-14b3f281503f",
+        ],
+        [
+          22,
+          "Jam Tangan Elegan Leather",
+          "Aksesori",
+          420000,
+          0,
+          "DKStore Official",
+          "photo-1522335789203-aabd1fc54bc9",
+        ],
+        [
+          23,
+          "Gelang Titanium Unisex",
+          "Aksesori",
+          55000,
+          0,
+          "Aksesori Center",
+          "photo-1535632066927-ab7c9ab60908",
+        ],
+        [
+          24,
+          "Topi Baseball Casual",
+          "Aksesori",
+          65000,
+          0,
+          "Aksesori Center",
+          "photo-1588850561407-ed78c282e89b",
+        ],
+        [
+          25,
+          "Tas Ransel Laptop Modern",
+          "Aksesori",
+          230000,
+          350000,
+          "DKStore Official",
+          "photo-1553062407-98eeb64c6a62",
+        ],
+        [
+          26,
+          "Dompet Kulit Asli Minimalis",
+          "Aksesori",
+          140000,
+          0,
+          "Aksesori Center",
+          "photo-1627123424574-724758594e93",
+        ],
+      ];
+      const P = RAW.map(([id, n, c, p, o, s, i]) => ({
+        id,
+        n,
+        c,
+        p,
+        o,
+        s,
+        img: "https://images.unsplash.com/" + i + "?w=500",
+      }));
+      const byId = (id) => P.find((x) => x.id === id);
+      const STORES = [
+        { n: "DKStore Official", d: "Koleksi fashion dan gadget pilihan." },
+        { n: "Gadget Utama", d: "Spesialis elektronik dan aksesori ori." },
+        { n: "Fashion Partner", d: "Busana dan alas kaki terlaris." },
+        { n: "Aksesori Center", d: "Aksesori harian harga bersahabat." },
+        { n: "Denim Style Partner", d: "Jaket dan denim dengan potongan modern." },
+      ];
+      const PROTECTED = [
+        "menu",
+        "kategori",
+        "listing",
+        "toko",
+        "partner",
+        "mitra",
+        "dashmitra",
+        "fitur",
+        "akun",
+        "bantuan",
+        "detail",
+        "cart",
+        "checkout",
+        "bayar",
+        "sukses",
+      ];
+
+      let user = null,
+        cart = [],
+        hist = [],
+        cur = "home",
+        pending = null,
+        selected = null,
+        payMethod = "",
+        lastTotal = 0,
+        orders = [],
+        detailBack = null;
+
+      /* NAVIGASI */
+      const TITLES = {home:"beranda",register:"registrasi",login:"login",menu:"menu utama",kategori:"kategori",listing:"daftar produk",toko:"status pengguna",partner:"toko partner",mitra:"form mitra",dashmitra:"dashboard mitra",fitur:"fitur lain",akun:"akun saya",bantuan:"bantuan",detail:"detail produk",cart:"keranjang",checkout:"checkout",bayar:"pembayaran"};
+      function show(id) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.toggle("active", p.id === id));
+        cur = id;
+        const tb = document.getElementById("topBack");
+        tb.style.display = id === "home" || id === "sukses" ? "none" : "inline-flex";
+        const prev = hist[hist.length - 1] || (id === "menu" ? "home" : user ? "menu" : "home");
+        document.getElementById("topBackLabel").textContent = "ke " + (TITLES[prev] || "beranda");
+        scrollTo(0, 0);
+      }
+      function go(id, reset) {
+        if (PROTECTED.includes(id) && !user) {
+          pending = id;
+          toast("Login dulu untuk melanjutkan");
+          id = "login";
+        }
+        if (reset) hist = [];
+        else if (cur !== id) hist.push(cur);
+        if (id === "cart") renderCart();
+        if (id === "checkout") sumCheckout();
+        if (id === "bayar")
+          document.getElementById("payTotal").textContent = "Total tagihan " + rp(total());
+        if (id === "partner") renderPartner();
+        show(id);
+      }
+      function back() {
+        const target = hist.pop() || (user && cur !== "menu" ? "menu" : "home");
+        show(target);
+        if (target === "cart") renderCart();
+        if (target === "checkout") sumCheckout();
+        if (target === "bayar")
+          document.getElementById("payTotal").textContent = "Total tagihan " + rp(total());
+        if (target === "partner") renderPartner();
+      }
+      window.addEventListener("popstate", () => {
+        if (cur !== "home" && cur !== "sukses") back();
+        else history.pushState(null, "");
+      });
+      history.pushState(null, "");
+      function guard(id) {
+        go(id);
+      }
+      function authClick() {
+        user ? logout() : go("login");
+      }
+
+      /* AUTH: Sudah login? Belum -> Registrasi -> Login */
+      function register() {
+        const n = val("rn"),
+          e = val("re"),
+          p = val("rp");
+        if (!n || !e.includes("@") || p.length < 6)
+          return toast("Lengkapi nama, email valid, dan sandi minimal 6 karakter");
+        user = { name: n, email: e };
+        toast("Akun dibuat. Silakan login");
+        setVal("le", e);
+        go("login");
+        user = null;
+        window._reg = { n, e, p };
+      }
+      function login() {
+        const e = val("le"),
+          p = val("lp");
+        if (!e || !p) return toast("Isi email dan kata sandi");
+        const r = window._reg;
+        if (r && r.e === e && r.p !== p) return toast("Kata sandi tidak cocok");
+        user = { name: r && r.e === e ? r.n : e.split("@")[0], email: e };
+        document.body.classList.add("in");
+        document.getElementById("authLink").textContent = "Logout";
+        document.getElementById("hello").textContent =
+          "Halo, " + user.name + ". Flash sale hari ini";
+        startTimer();
+        heroRender();
+        const t = pending || "menu";
+        pending = null;
+        hist = [];
+        go(t, true);
+        toast("Login berhasil");
+      }
+      function logout() {
+        user = null;
+        cart = [];
+        updCount();
+        document.body.classList.remove("in");
+        document.getElementById("authLink").textContent = "Login";
+        heroRender();
+        go("home", true);
+        toast("Anda sudah logout");
+      }
+
+      /* RENDER PRODUK */
+      function card(p) {
+        return `<div class="card"><div class="pic"><img src="${p.img}" alt="${p.n}" onerror="imgErr(this)">${p.o ? `<span class="tag">-${Math.round((1 - p.p / p.o) * 100)}%</span>` : ""}</div><h3 style="font-size:1rem">${p.n}</h3><span class="mute">${p.s} | ${p.c}</span><span class="price">${rp(p.p)}${p.o ? `<del>${rp(p.o)}</del>` : ""}</span><button class="btn" onclick="detail(${p.id})">Lihat detail</button></div>`;
+      }
+      function fill(id, arr) {
+        document.getElementById(id).innerHTML = arr.length
+          ? arr.map(card).join("")
+          : '<p class="mute">Produk tidak ditemukan. Coba kata kunci lain.</p>';
+      }
+      const EMO = [
+        ["kaos", "👕"],
+        ["kemeja", "👔"],
+        ["sepatu", "👟"],
+        ["jaket", "🧥"],
+        ["celana", "👖"],
+        ["hoodie", "🧥"],
+        ["sweater", "🧶"],
+        ["gaun", "👗"],
+        ["earphone", "🎧"],
+        ["smartwatch", "⌚"],
+        ["keyboard", "⌨️"],
+        ["mouse", "🖱️"],
+        ["speaker", "🔊"],
+        ["headset", "🎧"],
+        ["camera", "📷"],
+        ["powerbank", "🔋"],
+        ["kacamata", "👓"],
+        ["jam", "⌚"],
+        ["gelang", "📿"],
+        ["topi", "🧢"],
+        ["tas", "🎒"],
+        ["dompet", "👛"],
+      ];
+      const GRAD = {
+        Fashion: ["#7C3AED", "#DB2777"],
+        Elektronik: ["#0EA5E9", "#4F46E5"],
+        Aksesori: ["#F59E0B", "#EA580C"],
+      };
+      function art(p) {
+        const e = (EMO.find((x) => p.n.toLowerCase().includes(x[0])) || [0, "🛍️"])[1],
+          g = GRAD[p.c] || GRAD.Fashion;
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='500' height='400' viewBox='0 0 500 400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${g[0]}'/><stop offset='1' stop-color='${g[1]}'/></linearGradient></defs><rect width='500' height='400' fill='url(#g)'/><circle cx='250' cy='170' r='105' fill='rgba(255,255,255,.18)'/><text x='250' y='215' font-size='120' text-anchor='middle'>${e}</text><text x='250' y='350' font-size='24' font-weight='700' fill='white' text-anchor='middle' font-family='sans-serif'>${p.n}</text></svg>`;
+        return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      }
+      function imgErr(i) {
+        const p = P.find((x) => x.n === i.alt) || P[0];
+        if (p.img2 && !i.dataset.t) { i.dataset.t = 1; i.src = p.img2; return; }
+        i.onerror = null;
+        i.src = p.fb || art(p);
+      }
+      function listCat(c) {
+        setList(
+          c,
+          "Semua produk kategori " + c,
+          P.filter((x) => x.c === c),
+        );
+      }
+      function listPromo() {
+        setList(
+          "Promo diskon",
+          "Produk dengan potongan harga",
+          P.filter((x) => x.o),
+        );
+      }
+      function listStore(s) {
+        setList(
+          s,
+          "Katalog produk toko",
+          P.filter((x) => x.s === s),
+        );
+      }
+      function search() {
+        const q = val("q").toLowerCase().trim();
+        if (!q) return;
+        setList(
+          "Hasil pencarian",
+          'Kata kunci: "' + q + '"',
+          P.filter((x) => (x.n + x.c + x.s).toLowerCase().includes(q)),
+        );
+      }
+      function setList(t, s, arr) {
+        document.getElementById("lt").textContent = t;
+        document.getElementById("ls").textContent = s;
+        fill("listGrid", arr);
+        go("listing");
+      }
+      function renderPartner() {
+        document.getElementById("partnerGrid").innerHTML = STORES.map(
+          (s) =>
+            `<div class="card"><div class="pic"><img src="${P.find((x) => x.s === s.n).img}" alt="${P.find((x) => x.s === s.n).n}" onerror="imgErr(this)"></div><h3>${s.n}</h3><p class="mute">${s.d}</p><button class="btn" onclick="listStore('${s.n}')">Katalog toko</button></div>`,
+        ).join("");
+      }
+
+      /* DETAIL & KERANJANG */
+      // Pilihan warna & ukuran/varian menyesuaikan jenis produk
+      const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => String(a + i));
+      const WARNA = {
+        baju: ["Hitam", "Putih", "Navy", "Abu-abu"],
+        sepatu: ["Putih", "Hitam", "Cokelat"],
+        gadget: ["Hitam", "Putih", "Silver"],
+        kulit: ["Cokelat", "Hitam", "Tan"],
+        umum: ["Hitam", "Navy", "Abu-abu"],
+      };
+      const OPSI = [
+        ["sepatu", { w: "sepatu", l: "Nomor sepatu", o: range(38, 44), h: "Ukuran mengacu standar EU. Nomor 38 setara kira-kira 24 cm." }],
+        ["celana", { w: "baju", l: "Ukuran pinggang", o: range(28, 34).map((n) => n + " inci"), h: "Ukuran pinggang dalam inci." }],
+        ["kaos", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL"], h: "Potongan oversize: pilih satu ukuran lebih kecil jika ingin pas badan." }],
+        ["kemeja", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL"], h: "" }],
+        ["jaket", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL"], h: "" }],
+        ["hoodie", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL", "XXL"], h: "Potongan boxy, bahan tebal." }],
+        ["sweater", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL"], h: "" }],
+        ["gaun", { w: "baju", l: "Ukuran", o: ["S", "M", "L", "XL"], h: "" }],
+        ["smartwatch", { w: "gadget", l: "Ukuran case", o: ["40 mm", "44 mm"], h: "" }],
+        ["keyboard", { w: "gadget", l: "Tipe switch", o: ["Blue (klik)", "Red (linear)", "Brown (taktil)"], h: "" }],
+        ["mouse", { w: "gadget", l: "Koneksi", o: ["Kabel USB", "Wireless 2.4G"], h: "" }],
+        ["earphone", { w: "gadget", l: "Paket", o: ["Standar", "Dengan case charging"], h: "" }],
+        ["headset", { w: "gadget", l: "Koneksi", o: ["Kabel 3.5 mm", "Wireless"], h: "" }],
+        ["speaker", { w: "gadget", l: "Varian", o: ["Reguler", "Waterproof IPX7"], h: "" }],
+        ["camera", { w: "gadget", l: "Paket", o: ["Body only", "Kit lensa 18-55 mm", "Double lens kit"], h: "" }],
+        ["powerbank", { w: "gadget", l: "Paket", o: ["Tanpa kabel", "Dengan kabel USB-C"], h: "" }],
+        ["kacamata", { w: "umum", l: "Tipe lensa", o: ["Anti radiasi", "Blue-cut", "Photochromic"], h: "" }],
+        ["jam", { w: "kulit", l: "Diameter case", o: ["38 mm", "40 mm", "42 mm"], h: "Warna mengacu pada warna tali." }],
+        ["gelang", { w: "gadget", l: "Lingkar tangan", o: ["16 cm", "18 cm", "20 cm"], h: "Ukur lingkar pergelangan tangan lalu tambah 1 cm." }],
+        ["topi", { w: "umum", l: "Ukuran", o: ["All size (adjustable)"], h: "" }],
+        ["tas", { w: "umum", l: "Ukuran laptop", o: ["14 inci", "15.6 inci", "17 inci"], h: "" }],
+        ["dompet", { w: "kulit", l: "Model", o: ["Bifold", "Trifold", "Kartu saja"], h: "" }],
+      ];
+      function opsiFor(p) {
+        const n = p.n.toLowerCase();
+        const hit = OPSI.find((x) => n.includes(x[0]));
+        const c = hit ? hit[1] : { w: "umum", l: "Varian", o: ["Reguler"], h: "" };
+        return { warna: WARNA[c.w], label: c.l, opsi: c.o, hint: c.h };
+      }
+      function detail(id) {
+        selected = byId(id);
+        const p = selected;
+        const di = document.getElementById("dImg");
+        di.alt = p.n;
+        di.onerror = function () {
+          imgErr(this);
+        };
+        di.src = p.img;
+        document.getElementById("dName").textContent = p.n;
+        document.getElementById("dMeta").textContent = p.s + " | " + p.c;
+        document.getElementById("dPrice").textContent = rp(p.p);
+        const o = opsiFor(p);
+        document.getElementById("dColor").innerHTML = o.warna.map((w) => `<option>${w}</option>`).join("");
+        document.getElementById("dVarLabel").textContent = o.label;
+        document.getElementById("dVar").innerHTML = o.opsi.map((v) => `<option>${v}</option>`).join("");
+        document.getElementById("dHint").textContent = o.hint;
+        go("detail");
+      }
+      function addCart() {
+        const w = document.getElementById("dColor").value,
+          v = document.getElementById("dVar").value,
+          vl = document.getElementById("dVarLabel").textContent;
+        const f = cart.find((x) => x.id === selected.id && x.w === w && x.v === v);
+        f ? f.q++ : cart.push({ id: selected.id, q: 1, w, v, vl });
+        updCount();
+        toast("Ditambahkan ke keranjang");
+        go("cart");
+      }
+      function qty(i, d) {
+        const f = cart[i];
+        f.q += d;
+        if (f.q < 1) cart.splice(i, 1);
+        updCount();
+        renderCart();
+      }
+      function updCount() {
+        document.getElementById("cc").textContent = cart.reduce((a, b) => a + b.q, 0);
+      }
+      function sub() {
+        return cart.reduce((a, b) => a + byId(b.id).p * b.q, 0);
+      }
+      function total() {
+        return sub() + Number(val("ship") || 12000);
+      }
+      function renderCart() {
+        const box = document.getElementById("cartBox"),
+          btn = document.getElementById("toCheckout");
+        if (!cart.length) {
+          box.innerHTML =
+            '<p class="mute">Keranjang masih kosong. Pilih produk dari kategori atau flash sale.</p>';
+          btn.style.display = "none";
+          return;
+        }
+        btn.style.display = "";
+        box.innerHTML =
+          cart
+            .map((c, i) => {
+              const p = byId(c.id);
+              return `<div class="item"><img src="${p.img}" alt="${p.n}" onerror="imgErr(this)"><div class="info"><b>${p.n}</b><div class="mute">${p.s}</div><div class="mute">${c.vl}: ${c.v} | Warna: ${c.w}</div><span class="price">${rp(p.p)}</span></div><div class="qty"><button onclick="qty(${i},-1)" aria-label="Kurangi">-</button><b>${c.q}</b><button onclick="qty(${i},1)" aria-label="Tambah">+</button></div></div>`;
+            })
+            .join("") +
+          `<div class="total big" style="margin-top:10px"><span>Subtotal</span><span>${rp(sub())}</span></div>`;
+      }
+      function sumCheckout() {
+        const o = document.getElementById("ship"),
+          ong = Number(o.value);
+        document.getElementById("sumBox").innerHTML =
+          `<h3>Ringkasan pesanan</h3>` +
+          cart
+            .map(
+              (c) =>
+                `<div class="total"><span class="mute">${byId(c.id).n} (${c.v}, ${c.w}) x${c.q}</span><span>${rp(byId(c.id).p * c.q)}</span></div>`,
+            )
+            .join("") +
+          `<div class="total"><span class="mute">Ongkir</span><span>${rp(ong)}</span></div><div class="total big"><span>Total</span><span>${rp(sub() + ong)}</span></div>`;
+      }
+
+      /* PEMBAYARAN: Sukses? Ya -> Notifikasi; Tidak -> Pilih Pembayaran */
+      /* ====== STRUK / NOTA + QR ====== */
+      function buildOrder(method) {
+        const sel = document.getElementById("ship"),
+          kurir = sel.options[sel.selectedIndex].text.split(" (")[0],
+          ong = Number(sel.value),
+          lines = cart.map((c) => ({ id: c.id, v: c.v, w: c.w, q: c.q }));
+        return {
+          inv: "INV/2026/DK-" + Math.floor(10000 + Math.random() * 89999),
+          resi: "DKSTORE-" + Date.now().toString().slice(-9) + "ID",
+          tgl: new Date().toLocaleString("id-ID"),
+          kurir, method, ong, lines,
+          sub: sub(), total: sub() + ong,
+          items: cart.map((c) => byId(c.id).n + " (" + c.v + ", " + c.w + ") x" + c.q).join(", "),
+        };
+      }
+      // Struk teks bergaya olshop. Sengaja ringkas supaya QR tidak terlalu rapat dan mudah di-scan.
+      function strukText(o, compact) {
+        const strip = "🟧🟨🟧🟨🟧🟨";
+        const bar = "------------";
+        const L = o.lines.map((l) => {
+          const p = byId(l.id);
+          const em = (EMO.find((x) => p.n.toLowerCase().includes(x[0])) || [0, "🛍"])[1];
+          return em + " " + l.q + "x " + p.n + (compact ? "" : " (" + l.v + ", " + l.w + ")") + " " + rp(p.p * l.q);
+        });
+        return [strip, "🛒 DKSTORE OFFICIAL ✅ LUNAS",
+          "🧾 " + o.inv, "📅 " + o.tgl, "📦 " + o.resi, bar,
+          ...L, bar,
+          "🚚 Ongkir: " + rp(o.ong),
+          "💰 TOTAL: " + rp(o.total), "💳 " + o.method, strip,
+          "Terima kasih 🙏"].join("\n");
+      }
+      function strukForQR(o) {
+        let t = strukText(o);
+        if (new TextEncoder().encode(t).length > 420) t = strukText(o, true);
+        return t;
+      }
+      // Otomatis: web online (publik) -> QR berisi link kartu nota. Web lokal -> QR berisi struk teks (selalu terbaca di HP).
+      function qrIsLink() {
+        if (!/^https?:/.test(location.protocol)) return false;
+        const h = location.hostname;
+        if (!h.includes(".") || /^\d+\.\d+\.\d+\.\d+$/.test(h)) return false;
+        if (/(^|\.)(localhost|local|test|internal)$/.test(h)) return false;
+        if (/(^|\.)(claude\.ai|claudeusercontent\.com|anthropic\.com)$/.test(h)) return false;
+        return true;
+      }
+      function qrPayload(o) {
+        if (!qrIsLink()) return strukForQR(o);
+        const c = { i: o.inv, r: o.resi, t: o.tgl, k: o.kurir, m: o.method, o: o.ong, l: o.lines.map((l) => [l.id, l.v, l.w, l.q]) };
+        return location.origin + location.pathname + "#struk=" + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(c)))));
+      }
+      function qrSvg(text) {
+        try {
+          qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+          const q = qrcode(0, "L");
+          q.addData(text);
+          q.make();
+          return q.createSvgTag({ cellSize: 4, margin: 16, scalable: true });
+        } catch (e) {
+          return '<p style="color:#000;padding:20px;text-align:center">QR terlalu besar. Kurangi jumlah item.</p>';
+        }
+      }
+      function notaHTML(o, withQR) {
+        const L = o.lines.map((l) => {
+          const p = byId(l.id);
+          return `<div class="ln"><span>${l.q}x ${p.n}<br><small class="mute">${l.v} | ${l.w}</small></span><b>${rp(p.p * l.q)}</b></div>`;
+        }).join("");
+        return `<h3 style="text-align:center;color:var(--gold)">NOTA PEMBELIAN DKSTORE</h3>
+          <p class="mute" style="text-align:center">${o.tgl}</p><hr>
+          <div class="ln"><span class="mute">Invoice</span><b>${o.inv}</b></div>
+          <div class="ln"><span class="mute">Nomor resi</span><b>${o.resi}</b></div>
+          <div class="ln"><span class="mute">Ekspedisi</span><b>${o.kurir}</b></div>
+          <div class="ln"><span class="mute">Pembayaran</span><b>${o.method}</b></div><hr>${L}<hr>
+          <div class="ln"><span class="mute">Subtotal</span><span>${rp(o.sub)}</span></div>
+          <div class="ln"><span class="mute">Ongkir</span><span>${rp(o.ong)}</span></div>
+          <div class="total big"><span>Total</span><span>${rp(o.total)}</span></div>
+          <p style="color:var(--green);font-weight:700;margin-top:6px">Status: LUNAS | masuk antrean kirim seller</p>` +
+          (withQR ? `<hr><div class="qrbox" style="width:190px">${qrSvg(qrPayload(o))}</div><p class="mute" style="text-align:center;margin-top:6px">Scan dengan HP untuk menyimpan nota</p>` : "");
+      }
+      // Halaman nota yang terbuka di HP setelah QR di-scan (mode http/https)
+      function receiptHTML(o, withQR) {
+        const qty = o.lines.reduce((a, l) => a + l.q, 0);
+        const items = o.lines.map((l, i) => {
+          const p = byId(l.id);
+          return `<div class="er-it"><b>${i + 1}. ${p.n}</b><small>${l.v} | ${l.w}</small><div class="er-r"><span>${l.q} x ${rp(p.p)}</span><span>${rp(p.p * l.q)}</span></div></div>`;
+        }).join("");
+        return `<div class="er-wrap"><div class="er">
+          <div class="er-c"><div class="er-logo">DK</div><h3>DKStore Official</h3>
+            Jl. Veteran No. 10, Kota Malang,<br>Jawa Timur 65145, Indonesia<br>
+            <span style="font-size:.8rem;color:#555">${o.resi}</span><br><span class="er-ok">&#10003; Pembayaran berhasil</span></div>
+          <hr class="er-dash">
+          <div class="er-r"><span>${o.inv}</span><span class="mute">Kasir: DKStore Online</span></div>
+          <div class="er-r mute"><span>${o.tgl}</span><span>${o.kurir}</span></div>
+          <hr class="er-dash">${items}<hr class="er-dash">
+          <div class="er-r"><span>Total QTY : ${qty}</span></div>
+          <div class="er-r"><span>Sub Total</span><span>${rp(o.sub)}</span></div>
+          <div class="er-r"><span>Ongkir</span><span>${rp(o.ong)}</span></div>
+          <div class="er-total"><div class="er-r"><span>Total</span><span>${rp(o.total)}</span></div>
+            <div class="er-r"><span>Bayar (${o.method.replace(" Instan", "")})</span><span>${rp(o.total)}</span></div></div>
+          <hr class="er-dash">
+          <div class="er-c">Terima kasih sudah belanja di DKStore<br><span style="font-size:.8rem;color:#555">Pesanan diproses penjual. Estimasi tiba 2-5 hari kerja.</span></div>
+          ${withQR ? `<div class="qrbox">${qrSvg(qrPayload(o))}</div><div class="er-c" style="font-size:.75rem;color:#555;margin-top:4px">Scan untuk membawa nota ini</div>` : ""}
+        </div></div>
+        <button class="er-btn" onclick="window.print()">Simpan / cetak nota</button>`;
+      }
+      function checkStruk() {
+        const m = location.hash.match(/^#struk=(.+)$/);
+        if (!m) return;
+        try {
+          const c = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
+          const lines = c.l.map((x) => ({ id: x[0], v: x[1], w: x[2], q: x[3] }));
+          const sub = lines.reduce((a, l) => a + byId(l.id).p * l.q, 0);
+          const o = { inv: c.i, resi: c.r, tgl: c.t, kurir: c.k, method: c.m, ong: c.o, lines, sub, total: sub + c.o };
+          const box = document.getElementById("strukOnly");
+          box.innerHTML = receiptHTML(o, false);
+          box.classList.add("on");
+        } catch (e) {}
+      }
+
+      /* PEMBAYARAN: Sukses? Ya -> Notifikasi; Tidak -> Pilih Pembayaran */
+      let po = null, qrTick;
+      function pay(m) {
+        payMethod = m;
+        po = buildOrder(m);
+        lastTotal = po.total;
+        if (m === "QRIS Instan") {
+          document.getElementById("qrBox").innerHTML = qrSvg(qrPayload(po));
+          document.getElementById("qrTotal").textContent = rp(po.total);
+          document.getElementById("qrMode").textContent = qrIsLink()
+            ? "Scan untuk membuka kartu nota di HP."
+            : "Scan dengan kamera HP untuk melihat struk pembelian.";
+          let left = 600;
+          clearInterval(qrTick);
+          const paint = () => (document.getElementById("qrTimer").textContent =
+            String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0"));
+          paint();
+          qrTick = setInterval(() => {
+            left--;
+            paint();
+            if (left <= 0) { toast("Waktu QRIS habis"); payResult(false); }
+          }, 1000);
+          document.getElementById("qrisModal").classList.add("on");
+          return;
+        }
+        document.getElementById("mText").textContent = m + " | Total " + rp(lastTotal);
+        document.getElementById("modal").classList.add("on");
+      }
+      function payResult(ok) {
+        clearInterval(qrTick);
+        document.getElementById("modal").classList.remove("on");
+        document.getElementById("qrisModal").classList.remove("on");
+        if (!ok) {
+          toast("Pembayaran gagal. Pilih metode lain atau coba lagi");
+          return show("bayar");
+        }
+        const ord = po;
+        orders.unshift(ord);
+        cart = [];
+        updCount();
+        const nb = document.getElementById("notaBox");
+        nb.className = "nota";
+        nb.innerHTML = receiptHTML(ord, true);
+        hist = [];
+        show("sukses");
+      }
+      function renderAkun() {
+        document.getElementById("akunBox").innerHTML =
+          `<h3 style="color:var(--gold)">Profil</h3><p><b>Nama:</b> ${user.name}</p><p><b>Email:</b> ${user.email}</p><hr style="border-color:var(--line);margin:12px 0"><h3 style="color:var(--gold)">Riwayat belanja &amp; nota</h3>` +
+          (orders.length
+            ? orders
+                .map(
+                  (o) =>
+                    `<p style="margin-top:8px"><b>${o.inv}</b> | ${rp(o.total)}<br><span class="mute">${o.items}</span><br><span style="color:var(--green)">Resi: ${o.resi}</span></p>`,
+                )
+                .join("")
+            : '<p class="mute">Belum ada transaksi. Pesanan pertama Anda akan muncul di sini.</p>');
+      }
+
+      /* MITRA */
+      function daftarMitra() {
+        const t = val("mt"),
+          k = val("mk");
+        if (!t) return toast("Isi nama toko");
+        if (!/^\d{16}$/.test(k)) return toast("NIK harus 16 digit angka");
+        document.getElementById("dmName").textContent = "Dashboard " + t;
+        hist = ["menu"];
+        show("dashmitra");
+        cur = "dashmitra";
+        toast("Pendaftaran mitra diterima");
+      }
+
+      /* HERO CAROUSEL */
+      const HERO = [
+        { cat: "Fashion", badge: "Kategori Fashion", t: "Fashion untuk<br>gaya harianmu",
+          d: "Kemeja, jaket, hoodie, hingga sepatu. 11 pilihan dari toko partner terverifikasi.",
+          bg: "photo-1521572267360-ee0c2909d518", g: ["#7C3AED", "#DB2777"], ids: [2, 4, 6] },
+        { cat: "Elektronik", badge: "Kategori Elektronik", t: "Gadget pintar,<br>harga ringan",
+          d: "Smartwatch, earphone, keyboard, dan kamera dengan garansi resmi.",
+          bg: "photo-1523275335684-37898b6baf30", g: ["#0EA5E9", "#4F46E5"], ids: [14, 13, 15] },
+        { cat: "Aksesori", badge: "Kategori Aksesori", t: "Aksesori kecil,<br>kesan besar",
+          d: "Jam tangan, tas, dompet kulit, dan topi untuk melengkapi penampilan.",
+          bg: "photo-1553062407-98eeb64c6a62", g: ["#F59E0B", "#EA580C"], ids: [22, 25, 26] },
+      ];
+      let hi = 0, ht, moved = false;
+      function heroRender() {
+        const track = document.getElementById("track");
+        if (!track.children.length) {
+          track.innerHTML = HERO.map((h) => {
+            const pics = h.ids.map((id) => byId(id)).map((p) =>
+              `<img src="${p.img.replace("w=500", "w=900")}" alt="${p.n}" draggable="false" onerror="imgErr(this)">`).join("");
+            return `<div class="hs"><div class="hs-pics">${pics}</div>
+              <div class="hs-txt"><small>${h.badge}</small><h1>${h.t}</h1><p>${h.d}</p>
+              <button class="shop" onclick="listCat('${h.cat}')">LIHAT ${h.cat.toUpperCase()}</button></div></div>`;
+          }).join("");
+          initHeroDrag(track);
+        }
+        updDots();
+      }
+      function updDots() {
+        document.getElementById("dots").innerHTML = HERO.map(
+          (h, i) => `<i class="${i === hi ? "on" : ""}" title="${h.cat}" onclick="goSlide(${i})"></i>`).join("");
+      }
+      function goSlide(i) {
+        const track = document.getElementById("track");
+        hi = (i + HERO.length) % HERO.length;
+        track.scrollTo({ left: hi * track.clientWidth, behavior: "smooth" });
+        updDots();
+        heroAuto();
+      }
+      function initHeroDrag(track) {
+        // sentuhan layar sudah bisa digeser bawaan browser; ini menambah geser dengan mouse + keyboard
+        let down = false, x0 = 0, s0 = 0;
+        track.addEventListener("scroll", () => {
+          const n = Math.round(track.scrollLeft / track.clientWidth);
+          if (n !== hi && n >= 0 && n < HERO.length) { hi = n; updDots(); }
+        }, { passive: true });
+        track.addEventListener("pointerdown", (e) => {
+          if (e.pointerType !== "mouse") return;
+          down = true; moved = false; x0 = e.clientX; s0 = track.scrollLeft; clearInterval(ht);
+        });
+        window.addEventListener("pointermove", (e) => {
+          if (!down) return;
+          const dx = e.clientX - x0;
+          if (Math.abs(dx) > 5) { moved = true; track.classList.add("drag"); }
+          track.scrollLeft = s0 - dx;
+        });
+        window.addEventListener("pointerup", (e) => {
+          if (!down) return;
+          down = false;
+          track.classList.remove("drag");
+          const dx = e.clientX - x0;
+          const target = dx < -60 ? hi + 1 : dx > 60 ? hi - 1 : hi;
+          goSlide(Math.max(0, Math.min(HERO.length - 1, target)));
+          setTimeout(() => (moved = false), 50);
+        });
+        track.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") goSlide(hi + 1);
+          if (e.key === "ArrowLeft") goSlide(hi - 1);
+        });
+        track.addEventListener("touchstart", () => clearInterval(ht), { passive: true });
+        track.addEventListener("touchend", heroAuto, { passive: true });
+        window.addEventListener("resize", () => (track.scrollLeft = hi * track.clientWidth));
+      }
+      function heroAuto() {
+        clearInterval(ht);
+        if (!matchMedia("(prefers-reduced-motion:reduce)").matches)
+          ht = setInterval(() => {
+            if (document.getElementById("home").classList.contains("active")) goSlide(hi + 1);
+          }, 6000);
+      }
+
+      /* COUNTDOWN FLASH SALE */
+      let tm,
+        end = Date.now() + 2 * 3600 * 1000;
+      function startTimer() {
+        clearInterval(tm);
+        tick();
+        tm = setInterval(tick, 1000);
+      }
+      function tick() {
+        let s = Math.max(0, Math.floor((end - Date.now()) / 1000));
+        if (!s) {
+          end = Date.now() + 2 * 3600 * 1000;
+          s = 7200;
+        }
+        document.getElementById("timer").textContent = [s / 3600, (s % 3600) / 60, s % 60]
+          .map((v) => String(Math.floor(v)).padStart(2, "0"))
+          .join(":");
+      }
+
+      /* UTIL */
+      function val(id) {
+        return (document.getElementById(id) || {}).value || "";
+      }
+      function setVal(id, v) {
+        document.getElementById(id).value = v;
+      }
+      let tt;
+      function toast(m) {
+        const t = document.getElementById("toast");
+        t.textContent = m;
+        t.classList.add("on");
+        clearTimeout(tt);
+        tt = setTimeout(() => t.classList.remove("on"), 2600);
+      }
+
+      document.documentElement.style.setProperty("--hh", document.querySelector("header").offsetHeight + 12 + "px");
+      /* INIT */
+      fill(
+        "homeList",
+        P.filter((x) => [6, 14, 13, 22, 25, 3, 17, 2].includes(x.id)),
+      );
+      fill(
+        "flashList",
+        P.filter((x) => x.o),
+      );
+      heroRender();
+      heroAuto();
+      checkStruk();
+    </script>
+  </body>
+</html>
